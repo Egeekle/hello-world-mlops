@@ -1,11 +1,10 @@
 FROM python:3.12-slim
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
-COPY requirements.txt .
 
-RUN python -m pip install --upgrade pip
-RUN python -m pip install -r requirements.txt
-
+COPY pyproject.toml uv.lock ./
+RUN uv pip install --system -r pyproject.toml
 COPY . . 
 
 EXPOSE 5001
